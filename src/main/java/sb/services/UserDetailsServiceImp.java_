@@ -1,0 +1,25 @@
+package sb.services;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import sb.models.SBUser;
+
+public class UserDetailsServiceImp implements UserDetailsService {
+   @Override
+   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+      /*Here we are using dummy data, you need to load user data from
+      database or other third party application*/
+      //FIXME
+      if (username.equals("user")) {
+
+         SBUser user = new SBUser(username, "admin123");
+
+         return user;
+
+      } else {
+         throw new UsernameNotFoundException("User not found.");
+      }
+   }
+}

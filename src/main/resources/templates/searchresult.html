@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head th:include="template :: head"></head>
+   <body>
+      <div th:replace="template :: logo"></div>
+      <div th:replace="template :: menu"></div>
+      <div th:replace="template :: recherche"></div>
+      <div id='contenu'>
+         <p><span th:utext="${str}">recherche</span></p>
+         <ul>
+            <li th:each="product : ${products}">
+               <a th:href="@{|/product?id=${product.id}|}"><span th:text="${product.label}">product label</span></a>
+            </li> 
+         </ul>
+
+      </div>
+   </body>
+</html>

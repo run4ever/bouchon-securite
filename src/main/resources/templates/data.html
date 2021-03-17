@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="fr" ng-app="dataApp">
+   <head>
+      <title>SB - tests</title>        
+      <link rel="stylesheet" href="css/bootstrap.min.css"></link>
+      <script src="js/angular.min.js"></script>
+      <script src="js/data.js"></script>
+   </head>
+   <body>
+      <div ng-if='err'>
+         {{err}}
+      </div>
+      <div class="container">
+         <h1>Manipulation de données</h1>
+         <br/>
+         <section ng-controller="dataCtrl">
+            <h2>Mots de passe</h2>
+            <form id="password-form" ng-submit="sendPassword()" class="form-inline">
+               <div class="form-group mb-2">
+                  <input type='text' id="password" class="form-control" placeholder="Mot de passe à hacher" ng-model="password" />
+               </div>
+               <div class="form-group mx-sm-3 mb-2">
+                  <input type='text' id="salt" class="form-control" placeholder="Préciser un éventuel sel" ng-model="salt" />
+               </div>
+               <input type='submit' value='Hacher' class='btn btn-primary mb-2' />
+            </form>
+            <br/>
+            <div ng-show='viewhashres'>
+               <ul class="list-group">
+                  <li class="list-group-item">
+                     md5(<span ng-bind="pass"></span>) = <span ng-bind="md5res"></span>
+                  </li>
+                  <li class="list-group-item">
+                     sha1(<span ng-bind="pass"></span>) = <span ng-bind="sha1res"></span>
+                  </li>
+                  <li class="list-group-item">
+                     sha256(<span ng-bind="pass"></span>) = <span ng-bind="sha256res"></span>
+                  </li>
+                  <li class="list-group-item">
+                     sha512(<span ng-bind="pass"></span>) = <span ng-bind="sha512res"></span>
+                  </li>
+                  <li class="list-group-item">
+                     FreeBSD MD5(<span ng-bind="pass"></span>, <span ng-bind="realsalt"></span>) = <span ng-bind="freebsdmd5res"></span>
+                  </li>
+                  <li class="list-group-item">
+                     salted SHA256(<span ng-bind="pass"></span>, <span ng-bind="realsalt"></span>) = <span ng-bind="saltedsha256res"></span>
+                  </li>
+                  <li class="list-group-item">
+                     salted SHA512(<span ng-bind="pass"></span>, <span ng-bind="realsalt"></span>) = <span ng-bind="saltedsha512res"></span>
+                  </li>
+               </ul>
+            </div>
+
+            <h2>Base64</h2>
+            <form id="base64-decode" ng-submit="base64decode()" class="form-inline">
+               <div class="form-group mb-2">
+                  <input type='text' class="form-control" placeholder="Texte encodé en base64" ng-model="base64encoded" size='100' />
+               </div>
+               <input type='submit' value='Décoder' class='btn btn-primary mb-2' />
+            </form>
+            <br/>
+            <div ng-show='viewbase64decoded'>
+               Hex string : <span ng-bind="base64decodedhexres"></span>
+               <br/>
+               ASCII string : <span ng-bind="base64decodedasciires"></span>
+            </div>
+            <form id="base64-encode" ng-submit="base64encodeAscii()" class="form-inline">
+               <div class="form-group mb-2">
+                  <input type='text' class="form-control" placeholder="Texte ASCII" ng-model="asciitoencode" size='100' />
+               </div>
+               <input type='submit' value='Encoder' class='btn btn-primary mb-2' />
+            </form>
+            <form id="base64-encode" ng-submit="base64encodeHex()" class="form-inline">
+               <div class="form-group mb-2">
+                  <input type='text' class="form-control" placeholder="Texte Hex" ng-model="hextoencode" size='100' />
+               </div>
+               <input type='submit' value='Encoder' class='btn btn-primary mb-2' />
+            </form>
+            <br/>
+            <div ng-show='viewbase64encoded'>
+               Base64 : <span ng-bind="base64encodedres"></span>
+            </div>
+
+         </section>
+      </div>
+    </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+      <th:block th:include="template :: head" />
+      <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+      <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+      <script type="text/javascript">
+            function initialiser() {
+                var latlng = new google.maps.LatLng(48.340834, 2.489347);
+                var options = {
+                    center: latlng,
+                    zoom: 6,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var carte = new google.maps.Map(document.getElementById("carte"), options);
+
+               var marqueur = new google.maps.Marker({
+                 position: new google.maps.LatLng(50.6246191, 5.5290508),
+                 label: "Magasin de Liège",
+                 map: carte
+               });
+
+               var marqueur = new google.maps.Marker({
+                 position: new google.maps.LatLng(48.562256, 4.174807),
+                 label: "Magasin de Le Chêne",
+                 map: carte
+               });
+
+               var marqueur = new google.maps.Marker({
+                 position: new google.maps.LatLng(50.041662, 2.027989),
+                 label: "Magasin de Bouchon",
+                 map: carte
+               });
+
+            }
+        </script>
+    </head>
+    <body onload="initialiser()">
+      <div th:replace="template :: logo"></div>
+
+      <div th:replace="template :: menu"></div>
+   
+      <div th:replace="template :: recherche"></div>
+
+      <div id='contenu'>
+Retrouvez tous nos articles dans nos boutiques situées dans les villes de Liège (Belgique), Le Chêne (France)
+et de Bouchon (France).
+         <center>
+            <div id="carte" style="width:700px; height:700px"></div>
+         </center>
+      </div>
+    </body>
+</html>

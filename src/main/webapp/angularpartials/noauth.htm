@@ -1,0 +1,15 @@
+<h2>Authentification</h2>
+
+<div class="alert alert-danger" role="alert" ng-if="msg">
+   {{msg}}
+</div>
+<form ng-submit="sendAuth()" class="form-inline">
+   <div class="form-group mb-2">
+      <input type='text' class="form-control" placeholder="Login" ng-model="login" required />
+   </div>
+   <div class="form-group mx-sm-3 mb-2">
+      <input type='password' class="form-control" placeholder="Password" ng-model="pass" required />
+   </div>
+   <input type='submit' value='Connexion' class='btn btn-primary mb-2' />
+</form>
+

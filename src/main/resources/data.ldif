@@ -1,0 +1,50 @@
+dn: dc=superbouchons,dc=org
+objectClass: top
+objectClass: domain
+dc: superbouchons
+
+dn: ou=admins,dc=superbouchons,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: admins
+
+dn: uid=admin,ou=admins,dc=superbouchons,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: admin
+sn: admin
+uid: admin
+userPassword: gFS1dfd2sFsdnfSD0
+
+dn: uid=julien,ou=admins,dc=superbouchons,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Julien
+sn: Julien
+uid: julien
+userPassword: frites
+
+dn: uid=yves,ou=admins,dc=superbouchons,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Yves
+sn: yves
+uid: yves
+userPassword: kouign-amann
+
+dn: uid=nicolas,ou=admins,dc=superbouchons,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Nicolas
+sn: Nicolas
+uid: nicolas
+userPassword: saucisson
+

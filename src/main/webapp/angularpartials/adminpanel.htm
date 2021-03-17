@@ -1,0 +1,53 @@
+
+<div class="alert alert-danger" role="alert" ng-if="msg">
+   {{msg}}
+</div>
+
+<div>
+   Connecté avec <span ng-bind="login"></span>
+   <button class='btn btn-primary btn-sm mx-sm-3' ng-click="logout()">Logout</button>
+</div>
+
+<h2>Ajouter une image de bouchon</h2>
+
+<form id="img-form" ng-submit="sendImg()" class="form-inline" enctype="multipart/form-data" >
+   <div class="form-group mb-2 mr-sm-3">
+      <input name="file" type="FILE" value="" class="form-control" required />
+   </div>
+   <input type="submit" value="Ajouter" class='btn btn-primary mb-2' />
+</form>
+
+<h2>Effectuer une sauvegarde</h2>
+
+<form id='backup-form' ng-submit="doBackup()" class="form-inline">
+   <div class="form-group mb-2 mr-sm-3">
+      <input type='text' class="form-control" placeholder="Nom du fichier" ng-model="backupname" required />
+   </div>
+   <input type='submit' value='Lancer' class='btn btn-primary mb-2' />
+</form>        
+
+<h2>Rechercher dans les fournisseurs</h2>
+
+<form id='search-form' ng-submit="doSearch()" class="form-inline">
+   <div class="form-group mb-2 mr-sm-3">
+      <input type='text' class="form-control" placeholder="Nom" ng-model="suppliername" required />
+   </div>
+   <input type='submit' value='Trouver' class='btn btn-primary mb-2' />
+</form>
+
+<div ng-show='supplier'>
+   Résultat de la recherche pour <span ng-bind='search'></span><br/>
+   <br/>
+   <span ng-bind='searchres'></span>
+</div>
+
+<h2>Vérifier une adresse email</h2>
+
+<form id='email-form' ng-submit="doCheckEmail()" class="form-inline">
+   <div class="form-group mb-2 mr-sm-3">
+      <input type='text' class="form-control" placeholder="adresse@email.fr" ng-model="email" size="100" required />
+   </div>
+   <input type='submit' value='Vérifier' class='btn btn-primary mb-2' />
+</form>
+<span ng-bind='emailres'></span>
+

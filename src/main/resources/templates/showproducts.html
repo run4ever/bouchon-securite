@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head th:include="template :: head"></head>
+   <body>
+      <div th:replace="template :: logo"></div>
+      <div th:replace="template :: menu"></div> 
+      <div th:replace="template :: recherche"></div>
+      <div id='contenu'>
+         <h1><span th:text="${category.label}">categorie</span></h1>
+         <p><span th:text="${#lists.size(products)}">nb</span> produit<span th:if="${#lists.size(products) &gt; 1}" th:text="s">(s)</span></p>
+         <div style="width: 100%; overflow: hidden;">
+            <div th:each="product : ${products}" style="float: left; width: 150px; height: 200px; text-align: center; ">
+               <a th:href="@{|/product?id=${product.id}|}">
+                  <img th:src="@{|/picture?name=${product.img}|}" width="100px" />
+                  <br/>
+                  <span th:text="${product.label}">product label</span>
+               </a>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>

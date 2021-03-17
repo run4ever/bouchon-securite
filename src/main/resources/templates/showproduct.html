@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head th:include="template :: head"></head>
+   <body>
+      <div th:replace="template :: logo"></div>
+      <div th:replace="template :: menu"></div>
+      <div th:replace="template :: recherche"></div>
+      <div id='contenu'>
+         Produits &gt; <a th:href="@{|/products?cat=${category.id}|}"><span th:text="${category.label}">cat</span></a>
+         <h1><span th:text="${product.label}">nom</span></h1>
+
+         <p><span th:text="${product.description}">description</span></p>
+         <table>
+            <tr>
+               <td>
+                  <img th:src="@{|/picture?name=${product.img}|}" />
+               </td>
+               <td>
+                  Caractéristiques :
+                  <ul>
+                     <li>Matériau : <span th:text="${material.label}">mat</span></li>
+                     <li>Diamètre : <span th:text="${product.diameter}">dia</span>mm</li>
+                     <li>Hauteur : <span th:text="${product.height}">haut</span>mm</li>
+                     <li>Prix unitaire : <span th:text="${product.price}">prix</span>cts</li>
+                  </ul>
+               </td>
+            </tr>
+         </table>
+
+         <div sec:authorize="isAuthenticated()">
+            <div id='div-addtocartform'>
+               <form th:action="@{/addtocart}" method="post">
+                  <input type="hidden" name='id' th:value="${product.id}" />
+                  Quantité à acheter : <input type="number" name="nb" min="1" style="width: 2em;" /><br/>
+                  <input type='submit' value="Ajouter !" />
+               </form>
+            </div>
+            <button id='button' onclick='showForm(&quot;#div-addtocartform&quot;, &quot;Ajout au panier&quot;);'>Ajouter au panier</button>
+         </div>
+
+         <div>
+            Avis consommateurs :
+            <ul>
+               <li th:each="usercomment: ${usercomments}">
+                  <span th:utext="${usercomment}">avis</span>
+               </li>
+            </ul>
+
+            <div sec:authorize="isAuthenticated()">
+               <div id='div-commentform'>
+                  <form th:action="@{/comment}" method="post">
+                     Note associée au produit : <input type="number" name="mark" min="0" max="5" style="width: 2em;" />
+                     <br/>
+                     Commentaire : <input type="text" name="comment" size="50" />
+                     <br/>
+                     <input type='hidden' name='product' value='' th:value="${product.id}" />
+                     <input type='hidden' name='captchaval' value='' th:value="${captchaval}" />
+                     code de sécurité : <img th:src="@{|/captcha?id=${captchaval}|}" />
+                     <input type='text' name='captchares' value='' />
+                     <br/>
+                     <input type='submit' value="Envoyer" />
+                  </form>
+               </div>
+               <button id='button' onclick='showForm(&quot;#div-commentform&quot;, &quot;Déposer un commentaire&quot;);'>Déposer un commentaire</button>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head th:include="template :: head"></head>
+   <body>
+      <div th:replace="template :: logo"></div>
+      <div th:replace="template :: menu"></div>
+      <div th:replace="template :: recherche"></div>
+      <div id='contenu'>
+         Panier :
+         <ul>
+            <li th:each="item: ${contentlist}">
+               <span th:utext="${item.count}">nb</span> x <span th:utext="${item.productName}">nom</span> :
+               <span th:utext="${item.price}">prix</span> &euro;
+            </li>
+         </ul>
+         Remise : <span th:utext="${cart.discount}">discount</span> %
+         <br/>
+         Total : <span th:utext="${carttotalprice}">total</span> euros;
+         <br/>
+         <br/>
+         <a href='/emptycart'>Vider le panier</a>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="head">
+      <title>SuperBouchons - vente de bouchons</title>
+      <link rel='stylesheet' href='css/sb.css' />
+      <link rel='stylesheet' href='js/jquery-ui-1.10.4.custom/css/cupertino/jquery-ui-1.10.4.custom.css' />
+      <script src='js/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js'></script>
+      <script src='js/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js'></script>
+      <script src='js/sb.js'></script>
+    </head>
+    <body>
+
+      <div th:fragment="logo"> <!-- logo et connexion -->
+         <div style="width: 100%; overflow: hidden;">
+            <div style="float: left;">
+               <img src='img/logo.png' />
+            </div>
+            <div style="float: right;">
+               <div sec:authorize="isAnonymous()">
+                  <button id='button' onclick='showForm(&quot;#div-loginform&quot;, &quot;Accès client&quot;);'>Espace client</button>
+               </div>
+               <div sec:authorize="isAuthenticated()">
+                  Bienvenue <span sec:authentication="name">Bob</span>
+                  <br/>
+<!--
+                  Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
+                  <br/>
+-->
+                  <a href="/viewcart">Panier : <span th:text="${cartcount}">nb</span> éléments, <span th:text="${carttotalprice}">total</span>&euro;</a>
+                  <br/>
+                  <a href="/logout"><button id='button'>Déconnexion</button></a>
+               </div>
+            </div>
+         </div>
+
+         <div id='div-loginform'>
+            <form th:action="@{/login}" method="post">
+               <div><label>Login : <input type="text" name="username" id="username" /> </label></div>
+               <div><label>Password: <input type="password" name="password"/> </label></div>
+               <div><input type="submit" value="Connexion"/></div>
+           </form>
+           <button id='button' onclick='lostPassword();'>J'ai perdu mon mot de passe</button>
+         </div>
+      </div>
+
+      <div th:fragment="menu"> <!-- menu -->
+         <nav>
+            <ul>
+               <li><a th:href='@{/home}'>Accueil</a></li>
+               <li class='dropdown'>
+                  <a href='#'>Produits</a>
+                  <ul id='productsmenu' class='sub-menu'></ul>
+               </li>
+               <li><a href='shops'>Magasins</a></li>
+               <li><a href='#'>CGV</a></li>
+            </ul>
+         </nav>
+      </div>
+
+      <div style='width: 100%; text-align: right; padding-top: 10px;' th:fragment="recherche"> <!-- recherche -->
+         <form action='#' th:action="@{/search}" th:object="${search}" method='post'>
+            Rechercher un produit :
+            <input type='text' size='50' name='str' />
+            <input type='submit' value='Rechercher' />
+         </form>
+         <br/>
+      </div>
+
+      <div id='contenu'>
+      </div>
+    </body>
+</html>
