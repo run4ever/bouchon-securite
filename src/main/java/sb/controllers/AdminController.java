@@ -2,8 +2,8 @@ package sb.controllers;
 
 import sb.services.EmbeddedLdap;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.Model;
@@ -179,6 +179,7 @@ public class AdminController {
       String msg = "";
       JSONObject json = new JSONObject();
       Logger log = LoggerFactory.getLogger(this.getClass());
+      final List<String> contentTypes = Arrays.asList("png", "jpg", "jpeg", "gif");
 
       if (checkToken(req).isEmpty()) {
          json.put("msg", "Bad token");
@@ -190,16 +191,24 @@ public class AdminController {
       else
       {
          String fname = file.getOriginalFilename();
-         String path = req.getSession().getServletContext().getRealPath("/img/products")
-            + File.separator + fname;
+         Integer pointIndex = fname.indexOf(".");
+         String extension = fname.substring(pointIndex+1,fname.length()).toLowerCase();
+         if(contentTypes.contains(extension)){
+            String path = req.getSession().getServletContext().getRealPath("/img/products")
+                    + File.separator + fname;
 
-         File dest = new File(path);
-         try {
-            file.transferTo(dest);
-            msg = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/img/products/" + fname;
-         } catch (Exception e) {
-            log.info("Erreur : " + e.getMessage());
-            msg = "Erreur : " + e.getMessage();
+            File dest = new File(path);
+            try {
+               file.transferTo(dest);
+               msg = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/img/products/" + fname;
+            } catch (Exception e) {
+               log.info("Erreur : " + e.getMessage());
+               msg = "Erreur : " + e.getMessage();
+            }
+         }
+         else{
+            json.put("msg", "Bad extension");
+            return json.toString();
          }
       }
       json.put("msg", msg);
