@@ -1,5 +1,6 @@
 package sb.models;
 
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.security.MessageDigest;
 import java.io.IOException;
@@ -60,7 +61,14 @@ public class LostPassword {
       this.expiration = new Timestamp(System.currentTimeMillis() + 1000*60*60*10);
       try {
          MessageDigest instance = MessageDigest.getInstance("MD5");
-         byte[] messageDigest = instance.digest(String.valueOf(System.currentTimeMillis()).getBytes());
+
+         //objectif : sécuriser le token généré (ne pas utiliser une fonction de temps, car pas vraiment aléatoire)
+         //byte[] messageDigest = instance.digest(String.valueOf(System.currentTimeMillis()).getBytes());
+
+         SecureRandom random = new SecureRandom();
+         byte messageDigest[] = new byte[20];
+         random.nextBytes(messageDigest);
+
          StringBuilder hexString = new StringBuilder();
          for (int i = 0; i < messageDigest.length; i++) {
             String hex = Integer.toHexString(0xFF & messageDigest[i]);
