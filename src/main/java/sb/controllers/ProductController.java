@@ -25,20 +25,38 @@ import java.sql.Date;
 public class ProductController {
 
    @GetMapping("/product")
-   public ModelAndView showProduct(@RequestParam(value="id", required=true) String id, HttpServletRequest req) {
+   public ModelAndView showProduct(@RequestParam(value="id", required=true) Integer id, HttpServletRequest req) {
       JdbcTemplate template = Database.getDb();
-      Product res = (Product) template.queryForObject("SELECT * FROM product WHERE id=" + id,
-         new BeanPropertyRowMapper(Product.class));
+//      Product res = (Product) template.queryForObject("SELECT * FROM product WHERE id=" + id,
+//         new BeanPropertyRowMapper(Product.class));
 
-      Category cat = (Category) template.queryForObject("SELECT * from category WHERE id=" + res.getCategory(),
-         new BeanPropertyRowMapper(Category.class));    
+      Product res = (Product) template.queryForObject("SELECT * FROM product WHERE id = ?",
+              new Object[] { id },
+              new BeanPropertyRowMapper(Product.class)
+      );
 
-      Material mat = (Material) template.queryForObject("SELECT * from material WHERE id=" + res.getMaterial(),
-         new BeanPropertyRowMapper(Material.class));
+//      Category cat = (Category) template.queryForObject("SELECT * from category WHERE id=" + res.getCategory(),
+//         new BeanPropertyRowMapper(Category.class));
+      Category cat = (Category) template.queryForObject("SELECT * FROM category WHERE id = ?",
+              new Object[] { Integer.valueOf(res.getCategory()) },
+              new BeanPropertyRowMapper(Category.class)
+      );
+
+//      Material mat = (Material) template.queryForObject("SELECT * from material WHERE id=" + res.getMaterial(),
+//         new BeanPropertyRowMapper(Material.class));
+      Material mat = (Material) template.queryForObject("SELECT * FROM material WHERE id = ?",
+              new Object[] { Integer.valueOf(res.getMaterial()) },
+              new BeanPropertyRowMapper(Material.class)
+      );
 
       List<UserComment> comm = new ArrayList<UserComment>();
-      comm = template.query("SELECT * FROM usercomment WHERE product = " + id,
-         new BeanPropertyRowMapper(UserComment.class));
+//      comm = template.query("SELECT * FROM usercomment WHERE product = " + id,
+//         new BeanPropertyRowMapper(UserComment.class));
+      comm = template.query("SELECT * FROM usercomment WHERE product = ?",
+              new Object[] { Integer.valueOf(id) },
+              new BeanPropertyRowMapper(UserComment.class)
+      );
+
 
       List<String> usercomments = new ArrayList<String>();
       for (UserComment uc: comm)

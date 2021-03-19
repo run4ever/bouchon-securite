@@ -1,5 +1,6 @@
 package sb.controllers;
 
+import sb.models.Category;
 import sb.services.Database;
 import sb.models.Cart;
 import sb.models.Product;
@@ -25,8 +26,14 @@ public class SearchController {
       List<Product> res = new ArrayList<Product>();
       String s = new String();
 
-      res = template.query("SELECT * FROM product WHERE description LIKE '%" + str + "%' UNION SELECT * FROM product WHERE label LIKE '%" + str + "%'" ,
-         new BeanPropertyRowMapper(Product.class));
+//      res = template.query("SELECT * FROM product WHERE description LIKE '%" + str + "%' UNION SELECT * FROM product WHERE label LIKE '%" + str + "%'" ,
+//         new BeanPropertyRowMapper(Product.class));
+
+      String query = ("SELECT * FROM product WHERE description LIKE ? UNION SELECT * FROM product WHERE label LIKE ?");
+      res = template.query(query,
+              new Object[] { String.valueOf("%" + str + "%"), String.valueOf("%" + str + "%") },
+              new BeanPropertyRowMapper(Product.class)
+      );
 
       s = "Résultat de la recherche de <i>" + str + "</i> : <b>";
       s += res.size();
