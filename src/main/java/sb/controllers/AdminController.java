@@ -290,13 +290,21 @@ public class AdminController {
    }
 
    @PostMapping("/admin/backup")
-   public @ResponseBody String backup(HttpServletRequest request, @RequestParam(value="backupname", required=true) String name) {
+   public @ResponseBody String backup(HttpServletRequest request, @RequestParam(value="backupname", required=true) String name) throws NotFoundException {
       Runtime runtime = Runtime.getRuntime();
       String OS = System.getProperty("os.name").toLowerCase();
       String res = "";
       Logger log = LoggerFactory.getLogger(this.getClass());
       JSONObject json = new JSONObject();
-      
+
+      //Objectif : se protéger d'une saisie de " & dir & echo " dans le champ sauvegarde de l'interface admin
+
+      // 1 - filtrer en liste blanche les caractères autorisés pour file name
+      Pattern reg = Pattern.compile("^[a-zA-Z0-9]+$");
+      if(!reg.matcher(name).matches()){
+         throw new NotFoundException("Bad file name");
+      }
+
       String fname = LocalDate.now().toString() + "-" + name + ".zip";
       String cmd = "myzip dirsrc \"" + fname + "\"";
 
@@ -305,10 +313,13 @@ public class AdminController {
       try {
          Process p;
 
+         // 2 - remplacer l'appel au shell par la commande myzip
          if (OS.indexOf("win") >= 0)
-            p = runtime.exec(new String[]{"cmd.exe", "/C", cmd});
+//            p = runtime.exec(new String[]{"cmd.exe", "/C", cmd});
+            p = runtime.exec(new String[]{"myzip.exe", "dirsrc", fname});
          else
-            p = runtime.exec(new String[]{"/bin/sh", "-c", cmd});
+//            p = runtime.exec(new String[]{"/bin/sh", "-c", cmd});
+            p = runtime.exec(new String[]{"myzip", "dirsrc", fname});
 
          p.waitFor();
          BufferedReader output = new BufferedReader(new InputStreamReader(p.getInputStream()));
