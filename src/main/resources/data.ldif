@@ -16,7 +16,8 @@ objectclass: inetOrgPerson
 cn: admin
 sn: admin
 uid: admin
-userPassword: gFS1dfd2sFsdnfSD0
+#userPassword: gFS1dfd2sFsdnfSD0
+userPassword: $5$53060$PIrSZZzbE9BYccNdI5/KMd3pktL1Rv8FGMFOec6QhU6
 
 dn: uid=julien,ou=admins,dc=superbouchons,dc=org
 objectclass: top
@@ -26,7 +27,8 @@ objectclass: inetOrgPerson
 cn: Julien
 sn: Julien
 uid: julien
-userPassword: frites
+#userPassword: frites
+userPassword: $5$86456$g/MnbBmimjwprEt5wuvB2Ehassf/jOXN4KXHuf1IpuC
 
 dn: uid=yves,ou=admins,dc=superbouchons,dc=org
 objectclass: top
@@ -36,7 +38,8 @@ objectclass: inetOrgPerson
 cn: Yves
 sn: yves
 uid: yves
-userPassword: kouign-amann
+#userPassword: kouign-amann
+userPassword: $5$34938$NbaeU.cKhRzukrfQVWJ7JPxXLQFIOxzZh0Y9859TTy7
 
 dn: uid=nicolas,ou=admins,dc=superbouchons,dc=org
 objectclass: top
@@ -46,5 +49,6 @@ objectclass: inetOrgPerson
 cn: Nicolas
 sn: Nicolas
 uid: nicolas
-userPassword: saucisson
+#userPassword: saucisson
+userPassword: $5$40874$SU12wyhcCGKvdjQriETXjBmhWj95VgESxrr0bqJuaQA
 

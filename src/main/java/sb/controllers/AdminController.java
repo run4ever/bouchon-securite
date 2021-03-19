@@ -1,5 +1,10 @@
 package sb.controllers;
 
+import javassist.NotFoundException;
+import org.apache.commons.codec.digest.Crypt;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import sb.services.EmbeddedLdap;
 
 import java.util.*;
@@ -81,20 +86,49 @@ public class AdminController {
       }
    }
 
-   private String checklogin(String login, String password) {
+   private String checklogin(String login, String password) throws NotFoundException {
       Logger log = LoggerFactory.getLogger(this.getClass());
       
       try {
          InMemoryDirectoryServer server = EmbeddedLdap.getServer();
-         String filter = "(&(uid=" + login + ")(userPassword=" + password + "))";
+
+         //Objectif : éviter qu'un user se connecte avec admin / * (accès possible en LDAP)
+
+         //si mdp == * renvoyer une exception
+         if(password.equals("*")){
+            throw new NotFoundException("* is a forbidden value in password field");
+         }
+
+         //liste blanche des caractères autorisés pour user name
+         Pattern reg = Pattern.compile("^[a-zA-Z0-9]+$");
+         if(!reg.matcher(login).matches()){
+            throw new NotFoundException("This user does not exist - forbidden chars");
+         }
+
+         //on ne filtre plus sur les password, on les traitera plus bas
+//         String filter = "(&(uid=" + login + ")(userPassword=" + password + "))";
+         String filter = "(uid=" + login + ")";
          log.info(filter);
 
+         // 0 - remplacer les mots de passe en clair du fichier ldiff par leur hash dans le fichier data.ldiff
+         // 1 - requete ldap pour récupérer le hash de l'utilisateur dans la base ldiff
          SearchResult rs = server.search("ou=admins,dc=superbouchons,dc=org",
-            SearchScope.SUB, filter, null);
+                 SearchScope.SUB, filter, null);
+         String storedpasswd = rs.getSearchEntries().get(0).getAttributeValue("userPassword");
 
          if (rs.getEntryCount() == 1) {
             log.info("Connexion admin : " + login);
-            return login;
+            // 2 - crypter le mot de passe saisi par l'utilisateur, avec la classe Crypt
+            Crypt c = new Crypt();
+            String hashPwd = c.crypt(password,storedpasswd);
+            //le 2ème paramètre de crypt : il a juste besoin de $5$86456 mais pour éviter de mettre en dur (car change pour chaque user)
+            // on met tout le mot de passe stocké et crypt récupèrera le début dont il a besoin pour crypter avec le meme sel
+
+            // 3 - on compare le mot de passe haché stocké et le hash du mot de passe saisi
+            if(storedpasswd.equals(hashPwd)){
+               return login;
+            }
+            else return "";
          } else
             return "";
       }
@@ -142,7 +176,7 @@ public class AdminController {
    }
 
    @PostMapping("/admin/auth")
-   public @ResponseBody String adminAction(HttpServletRequest request, @RequestParam(value="login", required=true) String login, @RequestParam(value="pass", required=true) String password) {
+   public @ResponseBody String adminAction(HttpServletRequest request, @RequestParam(value="login", required=true) String login, @RequestParam(value="pass", required=true) String password) throws NotFoundException {
       Logger log = LoggerFactory.getLogger(this.getClass());
       JSONObject json = new JSONObject();
 
